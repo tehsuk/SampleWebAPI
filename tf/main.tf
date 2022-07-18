@@ -31,6 +31,19 @@ resource "azurerm_log_analytics_solution" "test" {
   }
 }
 
+resource "azurerm_container_registry" "acr" {
+  name                = var.cluster_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  sku                 = "Basic"
+}
+
+resource "azurerm_role_assignment" "aks_access_akr" {
+  scope = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id = var.aks_service_principal_object_id
+}
+
 resource "azurerm_kubernetes_cluster" "k8s" {
   name                = var.cluster_name
   location            = azurerm_resource_group.rg.location
@@ -38,9 +51,9 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   dns_prefix          = var.dns_prefix
 
   default_node_pool {
-    name       = "agentpool"
-    node_count = var.agent_count
-    vm_size    = "Standard_D2_v2"
+    name            = "agentpool"
+    node_count      = var.agent_count
+    vm_size         = "Standard_D2_v2"
     os_disk_size_gb = 30
   }
 
@@ -66,8 +79,8 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
 resource "azurerm_kubernetes_cluster_node_pool" "windows" {
   kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
-  name = "win"
-  os_type = "Windows"
-  vm_size = "Standard_D2_v2"
-  node_count = var.agent_count
+  name                  = "win"
+  os_type               = "Windows"
+  vm_size               = "Standard_D2_v2"
+  node_count            = var.agent_count
 }

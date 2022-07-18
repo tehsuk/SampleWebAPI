@@ -6,6 +6,10 @@ variable "aks_service_principal_app_id" {
   description = "AKS cluster service principal app id"
 }
 
+variable "aks_service_principal_object_id" {
+  description = "AKS cluster service principal object id"
+}
+
 variable "resource_group_name_prefix" {
   default     = "rg"
   description = "random prefix for rg name, used to avoid name collisions"
