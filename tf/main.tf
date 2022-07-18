@@ -31,24 +31,17 @@ resource "azurerm_log_analytics_solution" "test" {
   }
 }
 
-resource "azurerm_kubernetes_cluster" "rg" {
+resource "azurerm_kubernetes_cluster" "k8s" {
   name                = var.cluster_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   dns_prefix          = var.dns_prefix
 
-  linux_profile {
-    admin_username = "ubuntu"
-
-    ssh_key {
-      key_data = file(var.ssh_public_key_file)
-    }
-  }
-
   default_node_pool {
     name       = "agentpool"
     node_count = var.agent_count
     vm_size    = "Standard_D2_v2"
+    os_disk_size_gb = 30
   }
 
   service_principal {
@@ -63,10 +56,18 @@ resource "azurerm_kubernetes_cluster" "rg" {
 
   network_profile {
     load_balancer_sku = "standard"
-    network_plugin    = "kubenet"
+    network_plugin    = "azure"
   }
 
   tags = {
     Environment = "Development"
   }
+}
+
+resource "azurerm_kubernetes_cluster_node_pool" "windows" {
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
+  name = "win"
+  os_type = "Windows"
+  vm_size = "Standard_D2_v2"
+  node_count = var.agent_count
 }
