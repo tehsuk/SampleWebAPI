@@ -48,7 +48,7 @@ jobs:
       
     - task: ExtractFiles@1
       inputs:
-        archiveFilePatterns: '**/*.zip'
+        archiveFilePatterns: '$(build.artifactStagingDirectory)/*.zip'
         destinationFolder: '$(build.artifactStagingDirectory)/deploy'
         cleanDestinationFolder: true
         overwriteExistingFiles: false
