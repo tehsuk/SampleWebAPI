@@ -61,14 +61,14 @@ jobs:
       inputs:
         buildType: 'current'
         artifactName: 'WebApp'
-        targetPath: '$(Pipeline.Workspace)'
+        targetPath: '$(Pipeline.Workspace)/deploy'
     
     - task: PowerShell@2
       inputs:
         targetType: 'inline'
         script: |
           # Write your PowerShell commands here.
-          Get-Childitem -Path $(Pipeline.Workspace) -Recurse -Force
+          Get-Childitem -Path $(Pipeline.Workspace)/deploy -Recurse -Force
   
   - job: check_output
     displayName: 'Check Previous Output'
@@ -90,4 +90,4 @@ jobs:
         repository: 'plsamplewebapi'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        buildContext: '$(Pipeline.Workspace)'
+        buildContext: '$(Pipeline.Workspace)/deploy'
