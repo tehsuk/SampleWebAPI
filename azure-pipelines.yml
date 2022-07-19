@@ -68,7 +68,7 @@ jobs:
         targetType: 'inline'
         script: |
           # Write your PowerShell commands here.
-          Get-Childitem -Path . -Recurse -Force
+          Get-Childitem -Path $(Pipeline.Workspace) -Recurse -Force
   
   - job: check_output
     displayName: 'Check Previous Output'
