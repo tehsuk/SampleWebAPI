@@ -70,20 +70,6 @@ jobs:
           # Write your PowerShell commands here.
           Get-Childitem -Path $(Pipeline.Workspace)/deploy -Recurse -Force
   
-  - job: check_output
-    displayName: 'Check Previous Output'
-    dependsOn: prep_container
-    pool: server
-    steps:
-    - task: ManualValidation@0
-      inputs:
-        notifyUsers: 'dennis@beauchea.com'
-        instructions: 'check logs'
-
-  - job: build_container
-    displayName: 'Build Container'
-    dependsOn: check_output
-    steps:
     - task: Docker@2
       inputs:
         containerRegistry: 'plsamplewebapi'
