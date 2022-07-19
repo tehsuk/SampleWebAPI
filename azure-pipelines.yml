@@ -44,11 +44,35 @@ jobs:
           
           Get-Location
           Get-ChildItem -Path . -Recurse -Force
-        workingDirectory: '$(build.artifactStagingDirectory)'
+        workingDirectory: '$(build.artifactStagingDirectory)/deploy'
 
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(build.artifactStagingDirectory)/deploy'
+        artifact: 'WebApp'
+        publishLocation: 'pipeline'
+    
+  - job: prep_container
+    displayName: 'Prep for Container'
+    dependsOn: run_build
+    steps:
+
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'WebApp'
+        targetPath: '$(Pipeline.Workspace)'
+    
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          Get-Childitem -Path . -Recurse -Force
+  
   - job: check_output
     displayName: 'Check Previous Output'
-    dependsOn: run_build
+    dependsOn: prep_container
     pool: server
     steps:
     - task: ManualValidation@0
@@ -56,8 +80,8 @@ jobs:
         notifyUsers: 'dennis@beauchea.com'
         instructions: 'check logs'
 
-  - job: make_container
-    displayName: 'Build & Publish Container'
+  - job: build_container
+    displayName: 'Build Container'
     dependsOn: check_output
     steps:
     - task: Docker@2
@@ -66,4 +90,4 @@ jobs:
         repository: 'plsamplewebapi'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
-        buildContext: '$(build.artifactStagingDirectory)/deploy'
+        buildContext: '$(Pipeline.Workspace)'
