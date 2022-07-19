@@ -43,9 +43,10 @@ steps:
       Get-ChildItem . -Recurse
     workingDirectory: '$(build.artifactStagingDirectory)'
 
-- task: ManualIntervention@8
+- task: ManualValidation@0
   inputs:
-    instructions: 'check log output'
+    notifyUsers: 'dennis@beauchea.com'
+    instructions: 'check logs'
 
 - task: Docker@2
   inputs:
