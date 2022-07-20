@@ -90,7 +90,7 @@ jobs:
         action: 'createSecret'
         kubernetesServiceConnection: 'plsamplewebapi_aks'
         secretType: 'dockerRegistry'
-        secretName: 'plsamplewebapi_acr_secret'
+        secretName: 'plsamplewebapi-acr-secret'
         dockerRegistryEndpoint: 'plsamplewebapi_acr'
     - task: KubernetesManifest@0
       inputs:
@@ -98,4 +98,4 @@ jobs:
         kubernetesServiceConnection: 'plsamplewebapi_aks'
         manifests: 'k8s_deploy.yml'
         containers: 'plsamplewebapi.azurecr.io/plsamplewebapi:latest'
-        imagePullSecrets: 'plsamplewebapi_acr_secret'
+        imagePullSecrets: 'plsamplewebapi-acr-secret'
