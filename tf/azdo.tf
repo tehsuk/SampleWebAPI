@@ -69,7 +69,7 @@ resource "azuredevops_build_definition" "pl_tf_samplewebapi_buildpipeline" {
     repo_id               = "tehsuk/SampleWebAPI"
     service_connection_id = azuredevops_serviceendpoint_github.pl_tf_samplewebapi_github_connection.id
     yml_path              = "azure-pipelines.yml"
-    branch_name           = "main"
+    branch_name           = "refs/heads/main"
   }
 
 }
