@@ -1,0 +1,8 @@
+arm_subscription_id                 = "azure rm subscription id"
+arm_tenant_id                       = "azure rm tenant id"
+aks_service_principal_app_id        = "id of service principal with owner perms"
+aks_service_principal_client_secret = "secret for the above"
+aks_service_principal_object_id     = "object id for the above"
+azdo_personal_access_token          = "azure devops personal access token"
+azdo_org_service_url                = "https://dev.azure.com/myuser/"
+azdo_github_pat                     = "github persona access token"
