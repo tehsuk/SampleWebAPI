@@ -34,7 +34,7 @@ resource "azuredevops_serviceendpoint_kubernetes" "pl_tf_samplewebapi_aks_connec
     subscription_id = var.arm_subscription_id
     subscription_name = var.arm_subscription_name
     tenant_id = var.arm_tenant_id
-    resourcegroup_id = azurerm_resource_group.rg.id
+    resourcegroup_id = azurerm_resource_group.rg.name
     namespace = "default"
     cluster_name = azurerm_kubernetes_cluster.k8s.name
   }
@@ -51,7 +51,7 @@ resource "azuredevops_serviceendpoint_azurerm" "pl_tf_samplewebapi_arm_connectio
 resource "azuredevops_serviceendpoint_azurecr" "pl_tf_samplewebapi_acr_connection" {
   project_id = azuredevops_project.pl_tf_samplewebapi.id
   service_endpoint_name = "${var.cluster_name}_acr"
-  resource_group = azurerm_resource_group.rg.id
+  resource_group = azurerm_resource_group.rg.name
   azurecr_spn_tenantid = var.arm_tenant_id
   azurecr_name = var.cluster_name
   azurecr_subscription_id = var.arm_subscription_id
