@@ -83,7 +83,7 @@ jobs:
   
   - job: deploy
     displayName: 'Deploy to aks'
-    dependsOn: prep_container
+    dependsOn: push_container
     steps:
     - task: KubernetesManifest@0
       inputs:
