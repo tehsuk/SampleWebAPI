@@ -10,6 +10,14 @@ variable "aks_service_principal_object_id" {
   description = "AKS cluster service principal object id"
 }
 
+variable "azdo_org_service_url" {
+  description = "Azure Devops Organization URL"
+}
+
+variable "azdo_personal_access_token" {
+  description = "PAT to create objects under org"
+}
+
 variable "resource_group_name_prefix" {
   default     = "rg"
   description = "random prefix for rg name, used to avoid name collisions"
@@ -21,7 +29,7 @@ variable "resource_group_location" {
 }
 
 variable "agent_count" {
-  default = 3
+  default = 1
 }
 
 variable "ssh_public_key_file" {
