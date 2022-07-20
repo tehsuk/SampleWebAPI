@@ -73,3 +73,10 @@ resource "azuredevops_build_definition" "pl_tf_samplewebapi_buildpipeline" {
   }
 
 }
+
+resource "azuredevops_resource_authorization" "pl_tf_samplewebapi_allowacccess" {
+  project_id  = azuredevops_project.pl_tf_samplewebapi.id
+  resource_id = azuredevops_serviceendpoint_azurecr.pl_tf_samplewebapi_acr_connection.id
+  definition_id = azuredevops_build_definition.pl_tf_samplewebapi_buildpipeline.id
+  authorized  = true
+}
