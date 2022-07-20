@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pl_samplewebapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pl_samplewebapi
+  template:
+    metadata:
+      labels:
+        app: pl_samplewebapi
+    spec:
+      containers:
+        - name: pl_samplewebapi
+          image: 
+          ports:
+          - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: pl_samplewebapi
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+  selector:
+    app: pl_samplewebapi
