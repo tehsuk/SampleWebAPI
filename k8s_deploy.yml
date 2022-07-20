@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: pl_samplewebapi
-          image: 
+          image: plsamplewebapi.azurecr.io/plsamplewebapi:latest
           ports:
           - containerPort: 8080
 ---
