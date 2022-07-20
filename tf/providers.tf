@@ -25,6 +25,6 @@ provider "azurerm" {
 }
 
 provider "azuredevops" {
-  features {}
+  personal_access_token = var.azdo_personal_access_token
   org_service_url = var.azdo_org_service_url
 }

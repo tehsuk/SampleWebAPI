@@ -1,3 +1,17 @@
+variable "arm_subscription_id" {
+  description = "Azure RM Subscription ID"
+}
+
+variable "arm_tenant_id" {
+  description = "Azure RM Tenant ID"
+}
+
+variable "arm_subscription_name" {
+  description = "Azure RM Subscription Name"
+  default = "Visual Studio Enterprise"
+
+}
+
 variable "aks_service_principal_client_secret" {
   description = "AKS cluster service principal password"
 }
@@ -16,6 +30,10 @@ variable "azdo_org_service_url" {
 
 variable "azdo_personal_access_token" {
   description = "PAT to create objects under org"
+}
+
+variable "azdo_github_pat" {
+  description = "PAT for github repo access"
 }
 
 variable "resource_group_name_prefix" {
