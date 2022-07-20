@@ -14,21 +14,66 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@1
+jobs:
+  - job: run_build
+    displayName: 'Running Build Steps'
+    steps:
+    - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:publishUrl="$(build.artifactStagingDirectory)/deploy"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+        
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          
+          Get-Location
+          Get-ChildItem -Path . -Recurse -Force
+        workingDirectory: '$(build.artifactStagingDirectory)/deploy'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(build.artifactStagingDirectory)/deploy'
+        artifact: 'WebApp'
+        publishLocation: 'pipeline'
+    
+  - job: prep_container
+    displayName: 'Prep for Container'
+    dependsOn: run_build
+    steps:
+
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'WebApp'
+        targetPath: '$(Pipeline.Workspace)/deploy'
+    
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your PowerShell commands here.
+          Get-Childitem -Path $(Pipeline.Workspace)/deploy -Recurse -Force
+  
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'plsamplewebapi'
+        repository: 'plsamplewebapi'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        buildContext: '$(Pipeline.Workspace)/deploy'
