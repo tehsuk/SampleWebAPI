@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pl_samplewebapi
+  name: pl-samplewebapi
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pl_samplewebapi
+      app: pl-samplewebapi
   template:
     metadata:
       labels:
-        app: pl_samplewebapi
+        app: pl-samplewebapi
     spec:
       containers:
-        - name: pl_samplewebapi
+        - name: pl-samplewebapi
           image: plsamplewebapi.azurecr.io/plsamplewebapi:latest
           ports:
           - containerPort: 8080
@@ -21,10 +21,10 @@ spec:
 apiVersion: apps/v1
 kind: Service
 metadata:
-  name: pl_samplewebapi
+  name: pl-samplewebapi
 spec:
   type: LoadBalancer
   ports:
   - port: 8080
   selector:
-    app: pl_samplewebapi
+    app: pl-samplewebapi
