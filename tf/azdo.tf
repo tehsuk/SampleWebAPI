@@ -74,9 +74,30 @@ resource "azuredevops_build_definition" "pl_tf_samplewebapi_buildpipeline" {
 
 }
 
-resource "azuredevops_resource_authorization" "pl_tf_samplewebapi_allowacccess" {
+resource "azuredevops_resource_authorization" "pl_tf_samplewebapi_bulid_access_acr" {
   project_id  = azuredevops_project.pl_tf_samplewebapi.id
   resource_id = azuredevops_serviceendpoint_azurecr.pl_tf_samplewebapi_acr_connection.id
+  definition_id = azuredevops_build_definition.pl_tf_samplewebapi_buildpipeline.id
+  authorized  = true
+}
+
+resource "azuredevops_resource_authorization" "pl_tf_samplewebapi_bulid_access_aks" {
+  project_id  = azuredevops_project.pl_tf_samplewebapi.id
+  resource_id = azuredevops_serviceendpoint_kubernetes.pl_tf_samplewebapi_aks_connection.id
+  definition_id = azuredevops_build_definition.pl_tf_samplewebapi_buildpipeline.id
+  authorized  = true
+}
+
+resource "azuredevops_resource_authorization" "pl_tf_samplewebapi_bulid_access_arm" {
+  project_id  = azuredevops_project.pl_tf_samplewebapi.id
+  resource_id = azuredevops_serviceendpoint_azurerm.pl_tf_samplewebapi_arm_connection.id
+  definition_id = azuredevops_build_definition.pl_tf_samplewebapi_buildpipeline.id
+  authorized  = true
+}
+
+resource "azuredevops_resource_authorization" "pl_tf_samplewebapi_bulid_access_github" {
+  project_id  = azuredevops_project.pl_tf_samplewebapi.id
+  resource_id = azuredevops_serviceendpoint_github.pl_tf_samplewebapi_github_connection.id
   definition_id = azuredevops_build_definition.pl_tf_samplewebapi_buildpipeline.id
   authorized  = true
 }
