@@ -7,7 +7,7 @@ terraform {
       version = "=3.0.0"
     }
     azuredevops = {
-      source = "microsoft/azuredevops"
+      source  = "microsoft/azuredevops"
       version = ">=0.1.0"
     }
   }
@@ -26,5 +26,5 @@ provider "azurerm" {
 
 provider "azuredevops" {
   personal_access_token = var.azdo_personal_access_token
-  org_service_url = var.azdo_org_service_url
+  org_service_url       = var.azdo_org_service_url
 }

@@ -8,7 +8,7 @@ variable "arm_tenant_id" {
 
 variable "arm_subscription_name" {
   description = "Azure RM Subscription Name"
-  default = "Visual Studio Enterprise"
+  default     = "Visual Studio Enterprise"
 
 }
 
