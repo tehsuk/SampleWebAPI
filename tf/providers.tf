@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=3.0.0"
     }
+    azuredevops = {
+      source = "microsoft/azuredevops"
+      version = ">=0.1.0"
+    }
   }
 
   backend "azurerm" {
@@ -18,4 +22,9 @@ terraform {
 
 provider "azurerm" {
   features {}
+}
+
+provider "azuredevops" {
+  features {}
+  org_service_url = var.azdo_org_service_url
 }
