@@ -77,3 +77,6 @@ jobs:
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         buildContext: '$(Pipeline.Workspace)/deploy'
+        tags: |
+          $(Build.BuildId)
+          latest
