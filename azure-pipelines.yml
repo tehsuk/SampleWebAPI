@@ -52,8 +52,8 @@ jobs:
         artifact: 'WebApp'
         publishLocation: 'pipeline'
     
-  - job: prep_container
-    displayName: 'Prep for Container'
+  - job: push_container
+    displayName: 'Push Container to acr'
     dependsOn: run_build
     steps:
 
@@ -80,3 +80,22 @@ jobs:
         tags: |
           $(Build.BuildId)
           latest
+  
+  - job: deploy
+    displayName: 'Deploy to aks'
+    dependsOn: prep_container
+    steps:
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'createSecret'
+        kubernetesServiceConnection: 'plsamplewebapi_aks'
+        secretType: 'dockerRegistry'
+        secretName: 'plsamplewebapi_acr_secret'
+        dockerRegistryEndpoint: 'plsamplewebapi_acr'
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'plsamplewebapi_aks'
+        manifests: 'k8s_deploy.yml'
+        containers: 'plsamplewebapi.azurecr.io/plsamplewebapi:latest'
+        imagePullSecrets: 'plsamplewebapi_acr_secret'
